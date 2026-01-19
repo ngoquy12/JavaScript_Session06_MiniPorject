@@ -1,114 +1,110 @@
-// Khởi tạo mảng ban đầu
-let arr = [10, 20, -30, 40, -50];
+let arr = []; // Mảng dùng chung cho toàn bộ chương trình
+let isRunning = true;
 
-// Menu chương trình
-let choice = 0;
+while (isRunning) {
+  // Hiển thị Menu chức năng
+  let choice = prompt(
+    "--- MENU QUẢN LÝ MẢNG --- \n" +
+      "1. Nhập dãy số (cách nhau bởi dấu phẩy)\n" +
+      "2. Hiển thị mảng hiện tại\n" +
+      "3. Tìm giá trị lớn nhất (Max) và nhỏ nhất (Min)\n" +
+      "4. Tính tổng các phần tử\n" +
+      "5. Tìm kiếm phần tử\n" +
+      "6. Đảo ngược mảng\n" +
+      "7. Thoát chương trình\n\n" +
+      "Nhập lựa chọn của bạn (1-7):"
+  );
 
-while (choice !== 9) {
-    // Hiển thị menu và nhận lựa chọn từ người dùng
-    choice = parseInt(prompt(
-        `Chọn chức năng:
-        1. Thêm phần tử vào mảng
-        2. Xóa phần tử khỏi mảng
-        3. Tìm phần tử trong mảng
-        4. Sắp xếp mảng theo thứ tự tăng dần hoặc giảm dần
-        5. Sắp xếp mảng theo thứ tự tùy chỉnh (Alphabet hoặc Giá trị tuyệt đối)
-        6. Tính tổng các phần tử trong mảng
-        7. Tính trung bình cộng của mảng
-        8. Hiển thị mảng
-        9. Thoát`
-    ));
+  switch (choice) {
+    case "1":
+      // Chức năng 1: Nhập dãy số
+      let inputString = prompt("Nhập dãy số, ví dụ: 1,2,3,4");
+      if (inputString) {
+        // Sử dụng phương thức split để chuyển chuỗi thành mảng
+        arr = inputString.split(",");
+        // Chuyển đổi các phần tử từ chuỗi sang số để tính toán chính xác
+        for (let i = 0; i < arr.length; i++) {
+          arr[i] = Number(arr[i].trim());
+        }
+        alert("Đã nhập mảng thành công!");
+      }
+      break;
 
-    switch (choice) {
-        case 1: // Thêm phần tử vào mảng
-            let newElement = parseInt(prompt("Nhập phần tử cần thêm vào mảng:"));
-            arr.push(newElement); // Thêm phần tử vào cuối mảng
-            alert(`Đã thêm phần tử ${newElement} vào mảng.`);
-            break;
+    case "2":
+      // Chức năng 2: Hiển thị mảng
+      if (arr.length === 0) {
+        alert("Mảng hiện đang trống.");
+      } else {
+        let result = "";
+        // Sử dụng vòng lặp for...of để duyệt giá trị
+        for (let num of arr) {
+          result += num + " - ";
+        }
+        // Cắt bỏ ký tự " - " thừa ở cuối chuỗi
+        alert("Mảng hiện tại: " + result.slice(0, -3));
+      }
+      break;
 
-        case 2: // Xóa phần tử khỏi mảng
-            let removeElement = parseInt(prompt("Nhập phần tử cần xóa khỏi mảng:"));
-            let index = arr.indexOf(removeElement); // Tìm vị trí của phần tử trong mảng
-            if (index !== -1) {
-                arr.splice(index, 1); // Xóa phần tử tại vị trí tìm được
-                alert(`Đã xóa phần tử ${removeElement} khỏi mảng.`);
-            } else {
-                alert(`Không tìm thấy phần tử ${removeElement} trong mảng.`);
-            }
-            break;
+    case "3":
+      // Chức năng 3: Tìm Max/Min (Dùng kỹ thuật lính canh)
+      if (arr.length === 0) {
+        alert("Mảng trống, không thể tìm Max/Min.");
+      } else {
+        let max = arr[0];
+        let min = arr[0];
+        for (let i = 1; i < arr.length; i++) {
+          if (arr[i] > max) max = arr[i];
+          if (arr[i] < min) min = arr[i];
+        }
+        alert("Giá trị lớn nhất: " + max + "\nGiá trị nhỏ nhất: " + min);
+      }
+      break;
 
-        case 3: // Tìm phần tử trong mảng
-            let searchElement = parseInt(prompt("Nhập phần tử cần tìm trong mảng:"));
-            if (arr.includes(searchElement)) { // Kiểm tra sự tồn tại của phần tử trong mảng
-                alert(`Phần tử ${searchElement} có trong mảng.`);
-            } else {
-                alert(`Phần tử ${searchElement} không có trong mảng.`);
-            }
-            break;
+    case "4":
+      // Chức năng 4: Tính tổng
+      let sum = 0;
+      for (let num of arr) {
+        sum += num;
+      }
+      alert("Tổng các phần tử trong mảng là: " + sum);
+      break;
 
-        case 4: // Sắp xếp mảng theo thứ tự tăng dần hoặc giảm dần
-            let sortOrder = prompt("Sắp xếp mảng theo thứ tự nào? (a - tăng dần, d - giảm dần):");
-            if (sortOrder === 'a') {
-                arr.sort((a, b) => a - b); // Sắp xếp theo thứ tự tăng dần
-                alert("Mảng đã được sắp xếp theo thứ tự tăng dần.");
-            } else if (sortOrder === 'd') {
-                arr.sort((a, b) => b - a); // Sắp xếp theo thứ tự giảm dần
-                alert("Mảng đã được sắp xếp theo thứ tự giảm dần.");
-            } else {
-                alert("Lựa chọn không hợp lệ.");
-            }
-            break;
+    case "5":
+      // Chức năng 5: Tìm kiếm phần tử
+      let searchValue = Number(prompt("Nhập số cần tìm vị trí:"));
+      let foundIndex = -1;
+      // Sử dụng vòng lặp for truyền thống để lấy index
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === searchValue) {
+          foundIndex = i;
+          break; // Tìm thấy thì dừng vòng lặp
+        }
+      }
+      if (foundIndex !== -1) {
+        alert("Số " + searchValue + " nằm ở vị trí index: " + foundIndex);
+      } else {
+        alert("Không tìm thấy số " + searchValue + " trong mảng.");
+      }
+      break;
 
-        case 5: // Sắp xếp mảng theo thứ tự tùy chỉnh (Alphabet hoặc Giá trị tuyệt đối)
-            let customSort = prompt("Sắp xếp mảng theo tiêu chí nào? (a - Alphabet, b - Giá trị tuyệt đối):");
-            if (customSort === 'a') {
-                arr.sort((a, b) => {
-                    if (typeof a === 'string' && typeof b === 'string') {
-                        return a.localeCompare(b); // Sắp xếp theo thứ tự chữ cái
-                    } else {
-                        return 0; // Trả về 0 nếu không phải chuỗi
-                    }
-                });
-                alert("Mảng đã được sắp xếp theo thứ tự chữ cái.");
-            } else if (customSort === 'b') {
-                arr.sort((a, b) => Math.abs(a) - Math.abs(b)); // Sắp xếp theo giá trị tuyệt đối
-                alert("Mảng đã được sắp xếp theo giá trị tuyệt đối.");
-            } else {
-                alert("Lựa chọn không hợp lệ.");
-            }
-            break;
+    case "6":
+      // Chức năng 6: Đảo ngược mảng
+      if (arr.length === 0) {
+        alert("Mảng trống.");
+      } else {
+        arr.reverse(); // Sử dụng phương thức đảo ngược mảng
+        alert("Mảng đã được đảo ngược!");
+      }
+      break;
 
-        case 6: // Tính tổng các phần tử trong mảng
-            let sum = 0;
-            for (let i = 0; i < arr.length; i++) {
-                sum += arr[i]; // Cộng dồn các phần tử trong mảng
-            }
-            alert("Tổng các phần tử trong mảng là: " + sum);
-            break;
+    case "7":
+      // Chức năng 7: Thoát
+      alert("Cảm ơn bạn đã sử dụng chương trình!");
+      isRunning = false;
+      break;
 
-        case 7: // Tính trung bình cộng của mảng
-            if (arr.length === 0) {
-                alert("Mảng trống, không thể tính trung bình cộng.");
-            } else {
-                let sumForAverage = 0;
-                for (let i = 0; i < arr.length; i++) {
-                    sumForAverage += arr[i]; // Cộng dồn các phần tử trong mảng
-                }
-                let average = sumForAverage / arr.length; // Tính trung bình cộng
-                alert("Trung bình cộng của mảng là: " + average);
-            }
-            break;
-
-        case 8: // Hiển thị mảng
-            alert("Mảng hiện tại: " + arr.join(", ")); // Hiển thị tất cả các phần tử trong mảng
-            break;
-
-        case 9: // Thoát
-            alert("Thoát chương trình.");
-            break;
-
-        default:
-            alert("Lựa chọn không hợp lệ."); // Thông báo khi người dùng nhập lựa chọn sai
-            break;
-    }
+    default:
+      alert("Lựa chọn không hợp lệ. Vui lòng nhập từ 1 đến 7.");
+      break;
+  }
 }
