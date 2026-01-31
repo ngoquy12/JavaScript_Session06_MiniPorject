@@ -1,13 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Mini project (Thực hành JavaScript)</h1>
 
+    <script>
+      // Chặn menu chuột phải
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+      // Chặn chọn văn bản (không tuyệt đối)
+      document.addEventListener("selectstart", (e) => e.preventDefault());
+
+      // Chặn kéo thả
+      document.addEventListener("dragstart", (e) => e.preventDefault());
+      document.addEventListener("keydown", (e) => {
+        const k = e.key.toLowerCase();
+
+        // F12
+        if (e.key === "F12") e.preventDefault();
+
+        // Ctrl+Shift+I / J / C (Chrome/Edge)
+        if (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c"))
+          e.preventDefault();
+
+        // Ctrl+U (view source)
+        if (e.ctrlKey && k === "u") e.preventDefault();
+
+        // Cmd+Opt+I (macOS)
+        if (e.metaKey && e.altKey && k === "i") e.preventDefault();
+      });
+    </script>
     <script src="./index.js"></script>
-</body>
+  </body>
 </html>

@@ -1,110 +1,147 @@
-let arr = []; // Mảng dùng chung cho toàn bộ chương trình
-let isRunning = true;
+/**
+ * Mini Project: Hệ thống Quản trị Thư viện Nâng cao (Version 4.0)
+ * Mục tiêu: Áp dụng Array Methods và các loại Vòng lặp.
+ */
 
-while (isRunning) {
-  // Hiển thị Menu chức năng
-  let choice = prompt(
-    "--- MENU QUẢN LÝ MẢNG --- \n" +
-      "1. Nhập dãy số (cách nhau bởi dấu phẩy)\n" +
-      "2. Hiển thị mảng hiện tại\n" +
-      "3. Tìm giá trị lớn nhất (Max) và nhỏ nhất (Min)\n" +
-      "4. Tính tổng các phần tử\n" +
-      "5. Tìm kiếm phần tử\n" +
-      "6. Đảo ngược mảng\n" +
-      "7. Thoát chương trình\n\n" +
-      "Nhập lựa chọn của bạn (1-7):"
-  );
+function libraryManagementSystem() {
+  // --- A. CHỨC NĂNG BẢO MẬT ---
+  let attempts = 0;
+  let isAuthenticated = false;
+  const ADMIN_USER = "admin";
+  const ADMIN_PASS = "12345";
 
-  switch (choice) {
-    case "1":
-      // Chức năng 1: Nhập dãy số
-      let inputString = prompt("Nhập dãy số, ví dụ: 1,2,3,4");
-      if (inputString) {
-        // Sử dụng phương thức split để chuyển chuỗi thành mảng
-        arr = inputString.split(",");
-        // Chuyển đổi các phần tử từ chuỗi sang số để tính toán chính xác
-        for (let i = 0; i < arr.length; i++) {
-          arr[i] = Number(arr[i].trim());
-        }
-        alert("Đã nhập mảng thành công!");
-      }
+  while (attempts < 3) {
+    let user = prompt("Tên đăng nhập:");
+    let pass = prompt("Mật khẩu:");
+
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+      alert("Đăng nhập thành công!");
+      isAuthenticated = true;
       break;
-
-    case "2":
-      // Chức năng 2: Hiển thị mảng
-      if (arr.length === 0) {
-        alert("Mảng hiện đang trống.");
+    } else {
+      attempts++;
+      if (user !== ADMIN_USER) {
+        alert(`Sai tài khoản! Còn ${3 - attempts} lần thử.`);
       } else {
-        let result = "";
-        // Sử dụng vòng lặp for...of để duyệt giá trị
-        for (let num of arr) {
-          result += num + " - ";
-        }
-        // Cắt bỏ ký tự " - " thừa ở cuối chuỗi
-        alert("Mảng hiện tại: " + result.slice(0, -3));
+        alert(`Sai mật khẩu! Còn ${3 - attempts} lần thử.`);
       }
-      break;
-
-    case "3":
-      // Chức năng 3: Tìm Max/Min (Dùng kỹ thuật lính canh)
-      if (arr.length === 0) {
-        alert("Mảng trống, không thể tìm Max/Min.");
-      } else {
-        let max = arr[0];
-        let min = arr[0];
-        for (let i = 1; i < arr.length; i++) {
-          if (arr[i] > max) max = arr[i];
-          if (arr[i] < min) min = arr[i];
-        }
-        alert("Giá trị lớn nhất: " + max + "\nGiá trị nhỏ nhất: " + min);
-      }
-      break;
-
-    case "4":
-      // Chức năng 4: Tính tổng
-      let sum = 0;
-      for (let num of arr) {
-        sum += num;
-      }
-      alert("Tổng các phần tử trong mảng là: " + sum);
-      break;
-
-    case "5":
-      // Chức năng 5: Tìm kiếm phần tử
-      let searchValue = Number(prompt("Nhập số cần tìm vị trí:"));
-      let foundIndex = -1;
-      // Sử dụng vòng lặp for truyền thống để lấy index
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i] === searchValue) {
-          foundIndex = i;
-          break; // Tìm thấy thì dừng vòng lặp
-        }
-      }
-      if (foundIndex !== -1) {
-        alert("Số " + searchValue + " nằm ở vị trí index: " + foundIndex);
-      } else {
-        alert("Không tìm thấy số " + searchValue + " trong mảng.");
-      }
-      break;
-
-    case "6":
-      // Chức năng 6: Đảo ngược mảng
-      if (arr.length === 0) {
-        alert("Mảng trống.");
-      } else {
-        arr.reverse(); // Sử dụng phương thức đảo ngược mảng
-        alert("Mảng đã được đảo ngược!");
-      }
-      break;
-
-    case "7":
-      // Chức năng 7: Thoát
-      alert("Cảm ơn bạn đã sử dụng chương trình!");
-      isRunning = false;
-      break;
-
-    default:
-      alert("Lựa chọn không hợp lệ. Vui lòng nhập từ 1 đến 7.");
-      break;
+    }
   }
+
+  if (!isAuthenticated) {
+    alert("Tài khoản đã bị khóa!");
+    return; // Dừng chương trình
+  }
+
+  // --- B. KHỞI TẠO DỮ LIỆU ---
+  let libraries = ["Toán", "Văn", "Anh"];
+  let choice;
+
+  // --- C. MENU CHỨC NĂNG ---
+  do {
+    let menu = `--- HỆ THỐNG QUẢN TRỊ THƯ VIỆN 4.0 ---
+1. Nhập thêm lô sách mới
+2. Hiển thị danh sách sách
+3. Tìm kiếm sách
+4. Cập nhật tên sách
+5. Đảo ngược thứ tự kệ sách
+6. Nhập kho từ nguồn khác
+7. Thoát chương trình
+Vui lòng chọn (1-7):`;
+
+    choice = Number(prompt(menu));
+
+    switch (choice) {
+      case 1:
+        // CHỨC NĂNG 1: Nhập lô sách (Sử dụng split)
+        let input = prompt("Nhập danh sách tên sách (cách nhau bởi dấu phẩy):");
+        if (input) {
+          let newBooks = input.split(","); // Tách chuỗi thành mảng
+          let countAdded = 0;
+          for (let i = 0; i < newBooks.length; i++) {
+            let bookName = newBooks[i].trim(); // Loại bỏ khoảng trắng thừa
+            if (bookName !== "") {
+              libraries.push(bookName);
+              countAdded++;
+            }
+          }
+          alert(`Đã thêm thành công ${countAdded} cuốn sách mới.`);
+        }
+        break;
+
+      case 2:
+        // CHỨC NĂNG 2: Hiển thị danh sách (Sử dụng for...of)
+        console.clear();
+        console.log("--- DANH SÁCH SÁCH HIỆN CÓ ---");
+        if (libraries.length === 0) {
+          console.log("Thư viện hiện đang trống.");
+        } else {
+          let stt = 1;
+          for (let book of libraries) {
+            console.log(`${stt}. ${book}`);
+            stt++;
+          }
+        }
+        alert("Danh sách đã được in ra console (F12).");
+        break;
+
+      case 3:
+        // CHỨC NĂNG 3: Tìm kiếm (Sử dụng includes và indexOf)
+        let searchName = prompt("Nhập tên cuốn sách cần tìm:");
+        if (libraries.includes(searchName)) {
+          let index = libraries.indexOf(searchName);
+          alert(
+            `Sách "${searchName}" được tìm thấy tại vị trí số ${index} trong mảng.`,
+          );
+        } else {
+          alert(`Không tìm thấy sách "${searchName}" trong kho.`);
+        }
+        break;
+
+      case 4:
+        // CHỨC NĂNG 4: Cập nhật (Sử dụng indexOf)
+        let oldName = prompt("Nhập tên sách cần sửa:");
+        let foundIndex = libraries.indexOf(oldName);
+
+        if (foundIndex !== -1) {
+          let newName = prompt(`Tìm thấy sách "${oldName}". Nhập tên mới:`);
+          if (newName) {
+            libraries[foundIndex] = newName;
+            alert("Cập nhật thành công!");
+          }
+        } else {
+          alert("Sách không tồn tại để sửa.");
+        }
+        break;
+
+      case 5:
+        // CHỨC NĂNG 5: Đảo ngược (Sử dụng reverse và for...in)
+        libraries.reverse();
+        console.clear();
+        console.log("--- KỆ SÁCH SAU KHI ĐẢO NGƯỢC ---");
+        for (let index in libraries) {
+          console.log(`Vị trí index [${index}]: ${libraries[index]}`);
+        }
+        alert("Thứ tự trên kệ đã thay đổi. Kiểm tra console.");
+        break;
+
+      case 6:
+        // CHỨC NĂNG 6: Nhập kho nguồn khác (Sử dụng concat)
+        let externalLibrary = ["Sách Kỹ Năng", "Truyện Tranh"];
+        libraries = libraries.concat(externalLibrary);
+        alert("Đã gộp kho sách từ chi nhánh khác thành công.");
+        break;
+
+      case 7:
+        alert("Hẹn gặp lại!");
+        break;
+
+      default:
+        alert("Lựa chọn không hợp lệ!");
+        break;
+    }
+  } while (choice !== 7);
 }
+
+// Chạy chương trình
+libraryManagementSystem();
